@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Successful Login</title>
+</head>
+
+<body>
+    <h2>Welcome, {{user.first_name}}</h2>
+    <h3>Successfully registered (or logged in)</h3>
+    <p>
+        <a href="/logout">Log Out</a>
+    </p>
+    <h3>Add a Favorite Book</h3>
+    <form action="/add_book" method="POST">
+        {% csrf_token %}
+        <label for="title">Title</label>
+        <input type="text" name="title" id="book_info">
+        <label for="description">Description</label>
+        <input type="text" name="description" id="book_info">
+        <button type="submit">Add</button>
+    </form>
+
+    <h4>All Books</h4>
+    {% for book in books %}
+    <h4>
+        <a href="/books/{{book.id}}">{{book.title}}</a>
+    </h4>
+    <p>(added by {{book.uploaded_by.first_name}} {{book.uploaded_by.last_name}})</p>
+    {% endfor %}
+</body>
+
+</html>

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <h2>Welcome, {{this_user.first_name}} {{this_user.last_name}}</h2>
+    <p>
+        <a href="/logout">Log Out</a>
+        <a href="/books">Home</a>
+    </p>
+    {% if this_book.uploaded_by.id != request.session.user_id %}
+    <p>Description: {{this_book.description}}</p>
+    {% else %}
+    <form action="/books/{{this_book.id}}/update" method="POST">
+        {% csrf_token %}
+        <input type="text" name="title" value=" {{this_book.title}} ">
+        <p>Added by: {{this_book.uploaded_by.first_name}} {{this_book.uploaded_by.last_name}}</p>
+        <p>Added on: {{this_book.created_at}}</p>
+        <p>Last updated at: {{this_book.updated_at}}</p>
+        <input type="text" name="description" value="{{this_book.description}}">
+        <button type="submit">Update</button>
+        <a href="/books/{{this_book.id}}/delete" role="button">Delete</a>
+    </form>
+    {% endif %}
+    <h3>Users who like this book</h3>
+    <ul>
+        {% for books in this_book.users_who_like.all %}
+        <li>{{books.first_name}} {{books.last_name}}</li>
+        {% endfor %}
+    </ul>
+    <a href="/unfavorite/{{this_book.id}}" role="button">Remove From Favorites</a>
+    <a href="/favorite/{{this_book.id}}" role="button">Add to Favorites</a>
+</body>
+
+</html>
